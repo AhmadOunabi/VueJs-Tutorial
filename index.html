@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Vue.js</title>
+</head>
+<body>
+
+    <div id="app">
+        <h1>
+            Welcome to Vue.js Course
+        </h1>
+        <!-- DATA TYPES -->
+        <p>
+            Welcome {{name.length > 4 ? name : 'Your Name is too short'}} we are happy to see you again <br>
+            your age is : {{age}} years <br>
+            your first skill is : {{skills[0]}} <br>
+            you are {{isSubscribed ? 'subscribed' : 'not subscribed'}} <br>
+        </p>
+
+
+        <!-- FUNCTIONS AND METHODS -->
+        <p>{{saySomething()}}</p>
+        <p>{{date}}</p>
+        <button @click="{{update_date()}}"> UPDATE DATE </button> <br>
+        <br>
+        <button @click="{{buttonMethod()}}"> PRESS ME </button>
+
+        
+        <!-- V-IF V-ELSE V-ELSEIF CONDITIONS -->
+        <h2 v-if="name === 'Ahmad' ">Hello Papa</h2>
+        <h2 v-else-if="name === 'Yasser' ">Hello Son</h2>
+        <h2 v-else> Were bist du ?? </h2>
+        
+
+
+        <!-- V-FOR LOOP -->
+        <ul>
+            <li v-for="(item,index) in completedTests">
+                {{item.testName}}
+            </li>
+        </ul>
+
+
+          
+
+        <!--  V-ONCE , V-SHOW  -->
+        <h2 v-once> you can't change my name ever '''{{name}}'''</h2>
+
+<br>
+
+        <!-- V-ON -->
+        <div>
+           <h2>{{counter}}</h2>
+           <button @click="counter+=2">ADD 2</button>
+           <button @click.right="counter+=10">ADD WITH Right click </button>
+           <button @click.middle="counter+=100">ADD WITH middle click </button>
+        </div>
+
+
+
+        <!-- V-BIND OR ':' is to Add the elements without Mustache Brackets {{}} -->
+        <div>
+            <a :href="href">
+                <img style="width: 300px; height:300px" :src="source" :alt="alt">
+            </a>
+            <br>
+            <br>
+            <br>
+        </div>
+        
+        
+        <!-- V-MODEL OR TWO WAY BINDING  -->
+        <div>
+            <form action="" method="post">
+                <input type="text" :value="binder" placeholder="one way bind">
+                <input type="text" v-model:value="binder" placeholder="two way bind">
+                <p>{{binder}}</p>
+            </form>
+        </div>
+      
+
+
+
+        <!-- COMPONENTS-BASIC AND PASSING DATA TO COMPONENTS  -->
+        <app-count :website="website" :age="age"></app-count>
+        <app-count :website="website" :age="age"></app-count>
+        <app-count :website="website" :age="age"></app-count>
+        <app-count :website="website" :age="age"></app-count>
+
+        <products-app :id="product.id" :title="product.title" :price="product.price" v-for="product in products"></products-app>
+        
+
+        <!-- COMPUTED  -->
+       <p>
+        {{calcAge}} 
+       </p>
+
+       <div>
+        <label>Username</label>
+        <input v-model="username" type="text">
+        <p>{{validateUsername}}</p>
+
+       </div>
+
+
+    </div>
+
+
+
+
+       
+
+
+    <script src="js/vue.js"></script>
+    <script>
+        Vue.component(
+            'app-count',{
+                data:function(){
+                    return{
+                        name:'Ahmad',
+                        count:0,
+                    }
+                },
+                props:['website','age',],
+                template:'<p @click="count++">your name is {{name}} and you are {{age}} years old and you clicked {{count}} times and your website is {{website}} </p>',
+                
+            }
+        )
+
+        Vue.component('products-app',{
+            data:function(){
+                return{
+
+                }
+                
+            },
+            props:['id','title','price'],
+            template:'<p>{{id}}.{{title}} price:{{price}}</p>'
+        })
+
+
+
+        var vm = new Vue({
+            el: '#app',
+            computed:{
+                calcAge: function(){
+                    return this.age *2
+                },
+                validateUsername: function(){
+                    if (! this.username){
+                        return 'User name cant be empty' 
+                    }
+                    else if(this.username.length <= 8){
+                        return 'Username must be more than 8 Charachters'
+                    }
+                    else if(! isNaN(this.username)){
+                        return 'Username must contain letters'
+                    }
+                    else{
+                        return 'This username is valid!'
+                    }
+                }
+            },
+            data:{
+                username:'',
+                products:[
+                    {id:1,title:"product1",price:23},
+                    {id:2,title:"product2",price:24},
+                    {id:3,title:"product3",price:25},
+                    {id:4,title:"product4",price:26},
+                    {id:5,title:"product5",price:27},
+                ],
+                website:'https://www.google.com',
+                name: 'Ahmad',
+                age: 36,
+                skills: ['HTML','CSS','JS'],
+                isSubscribed: false,
+                completedTests:[
+                    {
+                        testName:"test HTML",
+                        score: 80
+                    },
+                    {
+                        testName:'test Css',
+                        score:65
+                    },
+                    {
+                        testName:'test javaScript',
+                        score:92
+                    },
+                ],
+
+                date:Date(),
+                counter:0,
+                binder:'Ahmad',
+
+                source: 'img/foto.jpg',
+                alt:'photo',
+                href:'https://www.google.com',
+            },
+            
+
+
+
+            methods: {
+                saySomething: function () {
+                    return 'Hello from function';
+                    },
+                
+                buttonMethod: function(){
+
+                    alert('YOU DID PRESS ME !!!!');
+                },
+
+                update_date: function(){
+                    this.date = Date();
+                
+                }
+                
+                },
+        })
+    </script>
+</body>
+</html>
